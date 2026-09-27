@@ -18,15 +18,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Find and Unzip Project
+    - name: Unzip and Move Files
       run: |
-        # Tự động tìm tất cả file .zip và giải nén
-        find . -maxdepth 2 -name "*.zip" -exec unzip -o {} \;
+        # 1. Giải nén file zip
+        unzip -o TPMS_Project.zip
         
-        # Đưa các file cấu hình ra thư mục gốc nếu bị nén lồng thư mục
-        find . -type f -name "build.gradle" ! -path "./app/*" -execdir cp -r ./* $GITHUB_WORKSPACE/ \; || true
+        # 2. Đưa toàn bộ file từ thư mục TPMS_Project ra ngoài gốc
+        cp -r TPMS_Project/* . || true
+        cp -r TPMS_Project/.* . || true
         
-        # Khởi tạo gradle wrapper
+        # 3. Khởi tạo gradle wrapper
         gradle wrapper
         chmod +x gradlew
 
